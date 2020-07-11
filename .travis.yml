@@ -1,0 +1,15 @@
+#これを実行する権限を宣言
+sudo: required
+
+#dockerを指定
+services: docker
+
+#travis ciのサーバーでコンテナを立てる
+before_install:
+    - docker-compose up --build -d
+
+script:
+    #RAILS_ENVでtest環境を指定。dbを作りmigrateし、test scriptを回す
+    - docker-compose exec --env 'RAILS_ENV=test' web rails db:create
+    - docker-compose exec --env 'RAILS_ENV=test' web rails db:migrate
+    - docker-compose exec --env 'RAILS_ENV=test' web rails test
