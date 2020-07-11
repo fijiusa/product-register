@@ -1,0 +1,37 @@
+version: '3'
+
+#dbで指定しているdb-dataが今は存在していないので、ここで作る
+volumes:
+    db-data:
+
+services:
+    #serviceの中身がそれぞれのコンテナ
+    #名前はなんでもいい
+    web:
+        #dockerの後に続くコマンドを指定できる
+        build: '.'
+        ports:
+            - '2000:3000'
+        volumes:
+            - '.:/product-register'
+        #configで指定している環境変数はホストではなくコンテナ内のものなので
+        #ここで指定する。実際はセキュリティーを考えここでも他のconfig fileとかに飛ばす。
+        environment:
+            - 'DATABASE_PASSWORD=postgres'
+        #-itの部分
+        tty: true
+        stdin_open: true
+        #configでdbをhost指定しているので、先にdbができてないといけない
+        #なのでdepends_onで先にdbができるように指定
+        depends_on: 
+            - db
+        #linkはwebとdbをつなぐ
+        links:
+            - db
+
+    db:
+        image: postgres
+        environment:
+            POSTGRES_PASSWORD: 'postgres'
+        volumes:
+            - 'db-data:/var/lib/postgresql/data'
