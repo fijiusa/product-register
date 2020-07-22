@@ -29,3 +29,4 @@ deploy:
     on:
         #デプロイはmasterにmergeされた時だけ
         branch: master
+#need to add this
