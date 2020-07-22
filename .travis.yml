@@ -22,10 +22,10 @@ deploy:
     provider: script
     script:
         #buildの時-tで名前指定できたよね。-fはdockerfileって名前じゃなくてもbuildできるように。
-        docker build -t registry.heroku.com/$HEROKU_APP_NAME/web -f Dockerfile.prod .;
-        docker push registry.heroku.com/$HEROKU_APP_NAME/web;
+        - docker build -t registry.heroku.com/$HEROKU_APP_NAME/web -f Dockerfile.prod .;
+        - docker push registry.heroku.com/$HEROKU_APP_NAME/web;
         #今回の本番環境ではherokuサーバー側にpostgresを用意しているので、createは不要
-        heroku run --app $HEROKU_APP_NAME rails db:migrate;
+        - heroku run --app $HEROKU_APP_NAME rails db:migrate;
     on:
         #デプロイはmasterにmergeされた時だけ
         branch: master
