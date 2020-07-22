@@ -12,3 +12,4 @@ RUN bundle install
 #current directoryのファイルを全部コピーする
 COPY . .
 CMD ["rails", "s"]
+#頼む
